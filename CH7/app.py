@@ -7,41 +7,41 @@ import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use("Agg")
 from wordcloud import WordCloud
+from deep_translator import GoogleTranslator
 
 #NLP Pkgs
 from textblob import TextBlob
-import spacy
 import neattext as nt
+import spacy
 
 from collections import Counter
 import re
 
-from deep_translator import GoogleTranslator
 
 #Sumarization Function
 def summarize_text(text, num_sentences=3):
     #Remove special charcters and convert text to lowercase
     clean_text = re.sub('[^a-zA-Z]', ' ',text).lower()
 
-    #Split the text into words
+    # Split the text into words
     words = clean_text.split()
 
-    #Calculate the frequency of each word
+    # Calculate the frequency of each word
     word_freq = Counter(words)
 
-    #Sort the words based on their frequency in descending order
+    # Sort the words based on their frequency in descending order
     sorted_words = sorted(word_freq, key=word_freq.get, reverse=True)
 
-    #Extract the topˋnum_sentencesˋ most frequent words
+    # Extract the topˋnum_sentencesˋ most frequent words
     top_words = sorted_words[:num_sentences]
 
-    #Creat the summary by joing the top words
+    # Creat the summary by joining the top words
     summary = ' '.join(top_words)
 
     return summary
 
 @st.cache_data
-#Lemma and Tokens Function
+# Lemma and Tokens Function
 def text_analyzer(text):
     # import English library
     nlp = spacy.load('en_core_web_sm')
@@ -82,47 +82,47 @@ def main():
         #製作一個文字框可以輸入文字
         raw_text = st.text_area("Write_something", "Enter a text in English...",height=300)
     #製作一個按鈕，當按下時將我們輸入的文字寫在螢幕上
-    if st.button("Analyze"):
-        if len(raw_text) ==0:
-            st.warning("Enter a text...")
-        else:
-            #blob = TextBlob(raw_text)
-            st.info("Basic Function")
+        if st.button("Analyze"):
+            if len(raw_text) ==0:
+                st.warning("Enter a text...")
+            else:
+                #blob = TextBlob(raw_text)
+                st.info("Basic Function")
 
-            col1,col2 = st.columns(2)
+                col1,col2 = st.columns(2)
 
-            with col1:
-                with st.expander("Basic Info"):
-                    st.info("Text Stats")
-                    word_desc = nt.TextFrame(raw_text).word_stats()
-                    result_desc = {"Length of Text":word_desc['Length of Text'],
+                with col1:
+                    with st.expander("Basic Info"):
+                        st.info("Text Stats")
+                        word_desc = nt.TextFrame(raw_text).word_stats()
+                        result_desc = {"Length of Text":word_desc['Length of Text'],
                                     "Num of Vowels":word_desc['Num of Vowels'],
                                     "Num of Consonants":word_desc['Num of Consonants'],
                                     "Num of Stopwords":word_desc['Num of Stopwords']}
-                    st.write(result_desc)    
+                        st.write(result_desc)    
 
-                with st.expander("Stopwords"):
+                    with st.expander("Stopwords"):
                         st.success("Stop Words List")
                         stop_w = nt.TextExtractor(raw_text).extract_stopwords()
                         st.error(stop_w)
 
-            with col2:
-                with st.expander("Processed Text"):
-                    st.success("Stopwords Excluded Text")
-                    processed_text = str(nt.TextFrame(raw_text).remove_stopwords())
-                    st.write(processed_text)
-                #"Only supported for TrueType fonts"的問題還沒解決
-                with st.expander("Plot Wordcloud"):
-                    st.success("Wordcloud")
-                    wordcloud = WordCloud().generate(processed_text)
-                    fig = plt.figure(1, figsize=(20,10))
-                    plt.imshow(wordcloud, interpolation = 'bilinear')
-                    plt.axis('off')
-                    st.pyplot(fig)
+                with col2:
+                    with st.expander("Processed Text"):
+                        st.success("Stopwords Excluded Text")
+                        processed_text = str(nt.TextFrame(raw_text).remove_stopwords())
+                        st.write(processed_text)
+                    #"Only supported for TrueType fonts"的問題還沒解決
+                    with st.expander("Plot Wordcloud"):
+                        st.success("Wordcloud")
+                        wordcloud = WordCloud().generate(processed_text)
+                        fig = plt.figure(1, figsize=(20,10))
+                        plt.imshow(wordcloud, interpolation = 'bilinear')
+                        plt.axis('off')
+                        st.pyplot(fig)
 
-            st.write("")
-            st.write("")
-            st.info("Advanced Features")
+                st.write("")
+                st.write("")
+                st.info("Advanced Features")
 
             col3,col4 = st.columns(2)
 
