@@ -13,7 +13,7 @@ from deep_translator import GoogleTranslator
 from textblob import TextBlob
 import neattext as nt
 import spacy
-import en_core_web_sm
+
 
 from collections import Counter
 import re
