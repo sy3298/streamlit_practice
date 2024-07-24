@@ -9,4 +9,4 @@ textblob==0.18.0.post0
 wordcloud==1.9.3
 numpy==1.23.3
 thinc==8.2.5
-https://github.com/explosion/spacy-models/blob/master/meta/en_core_web_sm-2.0.0-alpha4.json
+
